@@ -1,212 +1,107 @@
 <p align="center">
-<img src="https://i.imgur.com/w1owBoZ.png" height="15%" width="15%" alt="Microsoft Azure logo"/>
+<img src="https://i.imgur.com/u9BpBas.png" height="15%" width="15%" alt="Microsoft Azure logo"/>
 </p>
 
-<h1 align = "center">Virtual Machine Network in Microsoft Azure</h1>
-This tutorial outlines how to set up an Virtual Machine Network in Microsoft Azure and doing some exercises observing traffic.
+<h1 align = "center">Basics of Azure Portal</h1>
+This tutorial goes over how to use Microsoft Azure Portal as well as how to create/manage Resource Groups and Storage Accounts within Azure Portal.
 
 <br />
 
 <h2>Environments and Technologies Used</h2>
 
 <ul>
-  <li>Microsoft Azure (Virtual Machines/Compute)</li>
-  <li>Microsoft Remote Desktop</li>
-  <li>Windows Command Prompt</li>
-  <li>Wireshark</li>
-  <li>Network Protocols</li>
-  <ul>
-    <li>DNS - Domain Name System</li>
-    <li>ICMP - Internet Control Message Protocol</li>
-    <li>SSH - Secure Shell</li>
-    <li>RDP - Remote Desktop Protocol</li>
-  </ul>
-</ul>
-
-</br>
-
-<h2>Operating Systems Used </h2>
-<ul>
-  <li>Windows 10 (21H2)</li>
-  <li>Linux (Ubuntu 20.04)</li>
+  <li>Microsoft Azure Portal</li>
 </ul>
 
 </br>
 
 <h2>List of Prerequisites</h2>
-<ol>
-  <li>Microsoft Azure Account and Subscription</li>
-  <li>Access to Microsoft Remote Desktop Connection</li>
-  <ul>
-    <li>For MacOS users, follow <a href = "https://www.youtube.com/watch?v=0lllpAhgAJs&ab_channel=TheHostingVideos">this video</a> to use Remote Desktop on Mac</li>
-  </ul>
-  <li>(OPTIONAL): Notepad for typing down log in information for our Virtual Machines</li>
-</ol>
-
-<h2>Installation Steps</h2>
-
-<h3>Creating our Resource Group and Virtual Machines</h3>
-
-<p>
-  <ul>
-    <li><b>Resource Group</b></li>
-      <ul>
-       <li>Through <b>Azure Services</b>, go to <b>Resource groups</b> to create a Resource Group and name your Resource Group <b>RG-VM</b>. Take note of the <b>Region</b> of your Resouce Group as it'll come in play when setting up our VMs. Once done, then click on <b>Review + Create</b></li>
-        <ul>
-          <li><img src="https://i.imgur.com/nTyLbiR.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-        </ul>
-      </ul>
-    <li><b>Virtual Machine 1 using Windows 10</b></li>
-    <ul>
-      <li>Through <b>Azure Services</b>, go to <b>Virtual Machines</b> to create an Azure Virtual Machine. Select the Resource group we've created (RG-VM) and name the virtual machine <b>VM-1</b>. Make sure the <b>Region</b> is the same as your Resource Group and we'll set our <b>Availability Options</b> set to <i>No infrastructure</i> and <b>Security Type</b> to <i>Standard</i> for this tutorial</li>
-      <li>Set the <b>Image</b> (our Operating System) to <i>Windows 10 Pro, Version 22H2, x64 Gen2</i></li>
-      <li>The <b>Size</b> selected dicates the general processing power and RAM of our VM, for this tutorial we'll set it to <i>Standard_E2s_V3</i> which provides 2 virtual CPUs and 16 GBs of RAM</li>
-      <ul>
-        <li><img src="https://i.imgur.com/hk97cVq.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-      </ul>
-      <li>Set the username and password of your VM for logging in and make sure to check the box for licensing agreement</li>
-      <ul>
-        <li><img src="https://i.imgur.com/iiX9DrF.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-      </ul>
-      <li>Go to the <b>Network</b> tab and notice the <b>Virtual Network</b> created by the Virtual Machine as it should've been made by the Resource Group. It will be made automatically by the Virtual Machine</li>
-      <ul>
-        <li><img src="https://i.imgur.com/FuTufOj.png" height="80%" width="80%"></li>
-      </ul>
-      <li>Then head to the <b>Review + Create</b> and click on <b>Create</b> to deploy your Virtual Machine. Give it some time to fully deploy before moving on.</li>
-    </ul>
-    <li><b>Virtual Machine 2 using Ubuntu</b></li>
-    <ul>
-      <li>Same process as Virtual Machine 1 but we'll name the VM <b>VM-2</b> and set the Image to <i>Ubuntu Server 20.04 LTS x64 Gen2</i></li>
-      <li>Ubuntu by default has their Administrator Account authentication as SSH public key, so we must set it as Password for logging in through Remote Desktop</li>
-      <ul>
-        <li><img src="https://i.imgur.com/C2lFrmI.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-      </ul>
-    </ul>
-  </ul>
-</p>
-
-<br />
-
-<h3>Logging into a Virtual Machine using Remote Desktop Connection</h3>
-
-<p>
-  <ul>
-   <li>Through <b>Azure Services</b>, go to <b>Virtual Machines</b> and select VM-1 we've created and click on <b>Connect</b> to connect to the VM, from this page you can obtain the <b>Public IP Address</b> which we will use to connect to it via Remote Desktop Connection</li>
-    <ul>
-      <li><img src="https://i.imgur.com/1va7EWj.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>Copy the address and paste it into Remote Desktop Connection and click on <b>Connect</b> and log in using the username and password you set up for VM-1 (a pop up may show up for verification, just click on "Yes" if it does)</li>
-    <ul>
-      <li><img src="https://i.imgur.com/mtps7Gb.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>You are now successfully logged into your VM!</li>
-    <ul>
-      <li><img src="https://i.imgur.com/sPGWRfI.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-  </ul>
-</p>
-
-<br />
-
-<h2>Observing Traffic in Virtual Machines</h2>
-
-<h3>Download and Install Wireshark</h3>
-
-<p>
-  <ul>
-    <li>First, download <a href="https://www.wireshark.org/download.html">Wireshark</a> in your VM. Downloads may be slow depending on your VM's CPU</li>
-  </ul>
-</p>
-
-<br />
-
-<h3>Observing ICMP (Internet Control Message Protocol) Traffic</h3>
-
-<p>
-  <ul>
-    <li>Once installed, open Wireshark and start capturing packets (the blue fin icon). In the filter bar, type <b>icmp</b> to filter incoming ICMP packets</li>
-    <ul>
-      <li><img src="https://i.imgur.com/mxKvLYR.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>Back to your physical desktop, head to your Microsoft Azure Account obtain the <b>Private IP Address</b> of VM-2 and copy it</li>
-    <ul>
-    <li><img src="https://i.imgur.com/N48IU13.png" height="50%" width="50%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>Open up <b>Windows Powershell</b> in VM-1 and in the command line enter <b>ping</b> and the private IP of VM-2. Once done, ICMP packets should now display in Wireshark</li>
-    <ul>
-    <li><img src="https://i.imgur.com/0UW1HvI.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>We will now start a perpetual / non-stop ping between the Virtual Machines by entering <b>ping</b> then the private IP of VM-2 followed by <b>-t</b> causing nonstop ICMP packets displaying in Wireshark</li>
-    <ul>
-    <li><img src="https://i.imgur.com/VU7jxz7.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>Heading back to the Microsoft Azure Account, we'll go to the VM-2's <b>Network Security Group (NSG)</b> (which should be named <i>VM-2-nsg</i>) in order to halt the traffic</li>
-    <li>In VM-2-nsg, we'll go to <b>inbound security rules</b> and create a security rule that denies ICMPs. Click on <b>Add</b> to open a right side pop up to set the rule and dot in <b>Deny</b> under action and <b>ICMP</b> under Protocol. Set the Priority higher than 300 (priorities are inversely proportional meaning lower numbers have higher priority) and name the rule <b>DENY_ICMP_PING</b> then click <b>Add</b> to finish</li>
-    <ul>
-    <li><img src="https://i.imgur.com/lmVBKG5.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>Once completed, you'll notice the message "Request timed out" will start displaying in Powershell in VM-1, meaning ICMP ping has been halted from our security rule</li>
-    <ul>
-    <li><img src="https://i.imgur.com/oQFcdaQ.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
-    </ul>
-    <li>To reinstate the traffic, simply head back to your Microsoft Azure Account and set the DENY_ICMP_PING inbound rule's action to <b>Allow</b> and save</li>
-  </ul>
-</p>
-
-<br />
-
-<h3>Observing SSH (Secure Shell) Traffic</h3>
-
-<p>
 <ul>
-  <li>In Windows Powershell inside VM-1, type in <b>ssh VM-2@[VM-2's Private IP]</b> then hit Enter, enter in "yes" and it will ask for the password for VM-2</li>
-  <li>Since we are accessing the Terminal of VM-2 (essentially Linux's version of a command prompt) it doesn't diplay input/dots when typing a password but do know it is registering input when typing</li>
-  <li>Once logged in, you will be connected to the Terminal of VM-2. You can exit by entering the command <b>exit</b></li>
+  <li>Microsoft Azure Account and Subscription</li>
   <ul>
-  <li><img src="https://i.imgur.com/Z2Fomwa.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    <li><a href ="https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/mca-section-invoice#link-a-new-subscription">Free $200 Subscription Here</a></li>
   </ul>
-  <li>Typing in commands such as <i>username, pwd, or sudo apt</i> will display traffic on Wireshark, you can filter ssh traffic in Wireshark by typing in <b>ssh</b> in the filter bar</li>
 </ul>
+
+<br />
+
+<h2>Essentials</h2>
+
+<h3>Navigating Azure Portal</h3>
+
+<p>
+  <ul>
+  <li>Upon logging into Azure Portal, the first page you should see is always the <b>Home Page</b></li> 
+  <li>The Home Page offer multiple ways to access the Azure Portal's resources, one being the <b>Search Bar</b> at the top center and notable headings</li>
+    <ul>
+      <li><b>Azure Services</b> - The Services in Azure Portal that updates with most recent Resources used; all of Azure Portal's Services can be located on a seperate page by going to <i>More Services</i></li>
+      <li><b>Resources</b> - A listing that displays and updates whenever Resources (<i>Resource Groups, Virtual Machines, Network Security Groups, etc.</i>) are created or recently modified</li>
+      <li><b>Navigate</b> - A quality of life heading allowing users to easily navigate to the essentials of their account, notably Resources and Subscriptions</li>
+      <li><b>Tools</b> - Heading that offers quick links to the infastructure and cost of the resources used in Azure as well as the online course <b>Microsoft Learn</b> for further education how to use Microsoft Azure</li>
+      <li><img src ="https://i.imgur.com/MIU7NKy.png" width = 80% height = 80% /></li>
+    </ul>
+  </ul>
+</p>
+
+<br/>
+
+<h3>Creating a Resource Group</h3>
+
+<p>
+  <ul>
+    <li>Resource Groups serves as the base for many of Microsoft Azure's services and tools. To use Virtual Machines or Network Security Groups, you need a Resource Group.</li>
+    <li>Head to the <b>Resource groups</b> page and click on <b>create</b></li>
+    <li>Resource Groups have 3 fields for creation</li>
+    <ul>
+      <li><b>Basics</b> - Tab where you enter the name of your Resource Group and <b>Subscription</b> it is linked to for billing upon the use of Resources in that Group</li>
+      <li><b>Tags</b> - Simple organizational tool for managing resources and view consolidated billing by applying the same tag to multiple resources and resource groups</li>
+      <li><b>Review + Create</b> - Validation processing to check if credentials (notably a name) are filled and the Subscription is usable</li>
+    </ul>
+    <li>After validation passed, click on <b>Create</b> in the bottom and your Resource Group is created. Note: based on server speed and Internet connection, Resources and Resource Groups will take some time to deploy, take note of the <b>notification bell</b> at the top right to see when deployment is complete</li>
+    <ul>
+      <li><img src ="https://i.imgur.com/JbuLXbJ.png" width = 80% height = 80% /></li>
+    </ul>
+  </ul>
 </p>
 
 <br />
 
-<h3>Observer DHCP (Dynamic Host Configuration Protocol) Traffic</h3>
-
-<p>
-  <ul>Filter DHCP Traffic in Wireshark by entering <b>dhcp</b> in the filter bar</ul>
-  <ul>DHCP assigns IP Addresses to devices new to the network the moment said device joins the network. We can reassign an IP Address in the VM by going to Powershell an enterning the command <b>ipconfig /renew</b></ul>
-</p>
-
-<br/>
-
-<h3>Observing DNS (Domain Name System) Traffic</h3>
+<h3>Creating and using the Storage Account</h3>
 
 <p>
   <ul>
-    <li>Filter DNS traffic in Wireshark by entering <b>dns</b> in the filter bar</li>
-    <li>In Powershell, type in <b>nslookup</b> and a website such as google.com</li>
+    <li>The <b>Storage Account</b> is a Resource in Microsoft Azure that serves as a general 500 TB storage unit for data in the cloud, more information <a href ="https://azure.microsoft.com/en-us/products/category/storage/">here</a></li>
+    <li>First, have a simple image or txt file on hand for uploading</li>
+    <li>Head to the <b>Storage account</b> page and click on <b>create</b></li>
+    <li>Storage Accounts have multiple fields for creation</li>
+    <ul>
+      <li><b>Basics</b> - What Resourc Group the Resource will be in and instance details for the name of the storage account and determining performance</li>
+      <li><b>Advanced</b> - Offers more complex options such as adjusting the security and protocols; some options are not available depending on your storage account's instance details from Basics</li>
+      <li><b>Networking</b> - Connectivity and Routing options</li>
+      <li><b>Data Protection</b> - Enables how data is recovered and tracked in storage</li>
+      <li><b>Encryption</b> - Determines how data is encrpted, uses Microsoft-managed keys by default</li>
+      <li><b>Tags</b> - Same as creation of tags in Resource Group creation</li>
+      <li><b>Review</b> - checking validation and overview of the Resource's information</li>
+    </ul>
+    <li>After inputting information, click on <b>Create</b> to create the resource and wait for deployment to finish</li>
+    <li>Now to store data in the Storage Account, we need to create a <b>container</b> by going to the Storage Account you made and navigating to <b>Containers</b> under <b>Data Storage</b>. Click on <b>(Plus Sign) Container</b> and enter information in the window on the right</li>
+    <ul>
+      <li><img src= "https://i.imgur.com/YVo1OhU.png" /></li>
+    </ul>
+    <li>Through here it's self explanitory as you use the <b>Upload</b> icon in the container to upload files in selected container. If your file is a coding language or txt file, you can edit its information through Azure</li>
   </ul>
 </p>
 
-<br/>
-
-<h3>Observing RDP (Remote Desktop Protocol) Traffic</h3>
-
-<p>
-  <ul>
-    <li>Filter RDP traffic in Wireshark by entering <b>tcp.port == 3389</b> in the filter bar and you'll notice non-stop traffic</li>
-    <li>This is because the RDP is constantly showing you a live stream from one computer to another, therefor traffic is always being transmitted</li>
-  </ul>
-</p>
-
-<br/>
+<br />
 
 <h2>Clean Up</h2>
-<ul>
-  <li>Log off Remote Desktop Connection</li>
-  <li>It is advise to delete your Resource Group and VMs after finishing tinkering with them to prevent future costs, deletion of assets on Azure require verification by entering the name of the asset. Also to note, the Resource Group <b>NetworkWatcherRG</b> is created when creating NSGs for Virutal Machines and requires its own deletion</li>
+
+<p>
   <ul>
-  <li><img src="https://i.imgur.com/ZRkVDH5.png" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    <li>If no longer used, it is best to delete Resource Groups and it Resource to prevent billing from stacking up.</li>
+    <li>Head to the Resource Group and select <b>Delete</b> to open a window on the right. Deletion of the Resource Group require verification by entering its name, it's also convenient since it deletes all resources in that group</li>
+    <ul>
+      <li><img src ="https://i.imgur.com/vvqJrC9.png"/></li>
+    </ul>
   </ul>
-</ul>
+</p>
